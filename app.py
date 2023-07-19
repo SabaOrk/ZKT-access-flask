@@ -51,7 +51,7 @@ def set_user():
 
     
 @app.route('/controller/user/remove/')
-def set_user():
+def remove_user():
     body = request.json
     card = body.get('card')
     pin = body.get('pin')
