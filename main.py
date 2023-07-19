@@ -17,7 +17,7 @@ def add_user(card, pin, password, ip):
     return True
 
 
-def delete_user(card, ip):
+def delete_user(card, pin, ip):
     connstr = f"protocol=TCP,ipaddress={ip},port=4370,timeout=4000,passwd="
     try:
         with ZKAccess(connstr=connstr, device_model=ZK200) as zk:

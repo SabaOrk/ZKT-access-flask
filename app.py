@@ -11,20 +11,55 @@ def home():
 
 @app.route('/controller/disable/')
 def disable():
-    card = request.args.get('card')
-    res = delete_user(card=card)
+    body = request.json
+    ip = body.get('ip')
+    #TODO
     return jsonify({
         "success": res,
     })
 
 @app.route('/controller/enable/')
 def enable():
-    card = request.args.get('card')
-    res = add_user(card=card)
+    body = request.json
+    ip = body.get('ip')
+    #TODO
+    return jsonify({
+        "success": res,
+    })
+    
+    
+@app.route('/controller/restart/')
+def restart():
+    body = request.json
+    ip = body.get('ip')
+    #TODO
     return jsonify({
         "success": res,
     })
 
+
+@app.route('/controller/user/set/')
+def set_user():
+    body = request.json
+    card = body.get('card')
+    pin = body.get('pin')
+    ip = body.get('ip')
+    res = add_user(card, pin, ip)
+    return jsonify({
+        "success": res,
+    })
+
+    
+@app.route('/controller/user/remove/')
+def set_user():
+    body = request.json
+    card = body.get('card')
+    pin = body.get('pin')
+    ip = body.get('ip')
+    res = delete_user(card, pin, ip)
+    return jsonify({
+        "success": res,
+    })
 
 if __name__ == '__main__':
     app.run()
