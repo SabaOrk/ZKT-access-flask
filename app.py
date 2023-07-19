@@ -3,6 +3,11 @@ from main import add_user, delete_user
 
 app = Flask(__name__)
 
+@app.route('/')
+def home():
+    return jsonify({
+        "success": True
+    })
 
 @app.route('/controller/disable/')
 def disable():

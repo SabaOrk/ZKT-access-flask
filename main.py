@@ -3,6 +3,7 @@ from pyzkaccess.tables import User
 
 connstr = "protocol=TCP,ipaddress=149.3.34.167,port=4370,timeout=10000,passwd="
 
+
 def add_user(card, pin, password, ip):
     connstr = f"protocol=TCP,ipaddress={ip},port=4370,timeout=4000,passwd="
     try:
