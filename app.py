@@ -9,6 +9,7 @@ def home():
         "success": True
     })
 
+
 @app.route('/controller/disable/')
 def disable():
     body = request.json
@@ -38,19 +39,19 @@ def restart():
     })
 
 
-@app.route('/controller/user/set/')
+@app.route('/controller/user/set/', methods = ['POST'])
 def set_user():
     body = request.json
     card = body.get('card')
     pin = body.get('pin')
     ip = body.get('ip')
-    res = add_user(card, pin, ip)
+    res = add_user(card=card, pin=pin, ip=ip)
     return jsonify({
         "success": res,
     })
 
     
-@app.route('/controller/user/remove/')
+@app.route('/controller/user/remove/', methods = ['POST'])
 def remove_user():
     body = request.json
     card = body.get('card')
@@ -62,4 +63,4 @@ def remove_user():
     })
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
