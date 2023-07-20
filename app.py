@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from main import add_user, delete_user
+from main import add_user, delete_user, get_users
 
 app = Flask(__name__)
 
@@ -60,6 +60,16 @@ def remove_user():
     res = delete_user(card, pin, ip)
     return jsonify({
         "success": res,
+    })
+    
+    
+@app.route('/controller/users/', methods = ['POST'])
+def users():
+    body = request.json
+    ip = body.get('ip')
+    res = get_users(ip)
+    return jsonify({
+        "users": res,
     })
 
 if __name__ == '__main__':
