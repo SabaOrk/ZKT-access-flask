@@ -11,6 +11,7 @@ def add_user(card, pin, ip):
             user = User(card=card, pin=pin,
                         super_authorize=False).with_zk(zk)
             user.save()
+            zk.events.refresh()
     except Exception as ex:
         print(str(ex))
         return False
@@ -24,6 +25,7 @@ def delete_user(card, pin, ip):
             user = User(card=card, pin=pin,
                         super_authorize=False).with_zk(zk)
             user.delete()
+            zk.events.refresh()
     except Exception as ex:
         print(str(ex))
         return False
