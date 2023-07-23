@@ -11,6 +11,10 @@ def add_user(card, pin, ip):
             user = User(card=card, pin=pin,
                         super_authorize=False).with_zk(zk)
             user.save()
+            zk.doors[0].reader.events.poll()
+            zk.doors[1].reader.events.poll()
+            zk.doors[2].reader.events.poll()
+            zk.doors[3].reader.events.poll()
             zk.doors[0].reader.events.only(card=card, event_type=27).poll()
             zk.doors[1].reader.events.only(card=card, event_type=27).poll()
             zk.doors[2].reader.events.only(card=card, event_type=27).poll()
@@ -23,6 +27,10 @@ def add_user(card, pin, ip):
                 user = User(card=card, pin=pin,
                             super_authorize=False).with_zk(zk)
                 user.save()
+                zk.doors[0].reader.events.poll()
+                zk.doors[1].reader.events.poll()
+                zk.doors[2].reader.events.poll()
+                zk.doors[3].reader.events.poll()
                 zk.doors[0].reader.events.only(card=card, event_type=27).poll()
                 zk.doors[1].reader.events.only(card=card, event_type=27).poll()
                 zk.doors[2].reader.events.only(card=card, event_type=27).poll()
