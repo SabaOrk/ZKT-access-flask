@@ -12,6 +12,7 @@ def add_user(card, pin, ip):
                         super_authorize=False).with_zk(zk)
             user.save()
             zk.events.refresh()
+            print(f"{ip} SUCCESS")
     except Exception as ex:
         print('TRY #2')
         try:
@@ -20,6 +21,7 @@ def add_user(card, pin, ip):
                             super_authorize=False).with_zk(zk)
                 user.save()
                 zk.events.refresh()
+                print(f"{ip} SUCCESS ON TRY #2")
         except Exception as ex:
             print(str(ex))
             return False
@@ -34,6 +36,7 @@ def delete_user(card, pin, ip):
                         super_authorize=False).with_zk(zk)
             user.delete()
             zk.events.refresh()
+            print(f"{ip} SUCCESS")
     except Exception as ex:
         print('TRY #2')
         try:
@@ -42,6 +45,7 @@ def delete_user(card, pin, ip):
                             super_authorize=False).with_zk(zk)
                 user.delete()
                 zk.events.refresh()
+                print(f"{ip} SUCCESS ON TRY #2")
         except Exception as ex:
             print(str(ex))
             return False
