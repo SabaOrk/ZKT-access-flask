@@ -51,7 +51,7 @@ def delete_user(card, pin, ip):
             user = User(card=card, pin=pin,
                         super_authorize=False).with_zk(zk)
             user.delete()
-            zk.events.refresh()
+            # zk.events.refresh()
             print(f"{ip} SUCCESS")
     except Exception as ex:
         print('TRY #2')
@@ -60,7 +60,7 @@ def delete_user(card, pin, ip):
                 user = User(card=card, pin=pin,
                             super_authorize=False).with_zk(zk)
                 user.delete()
-                zk.events.refresh()
+                # zk.events.refresh()
                 print(f"{ip} SUCCESS ON TRY #2")
         except Exception as ex:
             print(str(ex))
