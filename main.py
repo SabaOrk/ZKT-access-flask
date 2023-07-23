@@ -11,7 +11,10 @@ def add_user(card, pin, ip):
             user = User(card=card, pin=pin,
                         super_authorize=False).with_zk(zk)
             user.save()
-            zk.events.refresh()
+            zk.door[0].reader.events.only(card=card, event_type=27).poll()
+            zk.door[1].reader.events.only(card=card, event_type=27).poll()
+            zk.door[2].reader.events.only(card=card, event_type=27).poll()
+            zk.door[3].reader.events.only(card=card, event_type=27).poll()
             print(f"{ip} SUCCESS")
     except Exception as ex:
         print('TRY #2')
@@ -20,7 +23,10 @@ def add_user(card, pin, ip):
                 user = User(card=card, pin=pin,
                             super_authorize=False).with_zk(zk)
                 user.save()
-                zk.events.refresh()
+                zk.door[0].reader.events.only(card=card, event_type=27).poll()
+                zk.door[1].reader.events.only(card=card, event_type=27).poll()
+                zk.door[2].reader.events.only(card=card, event_type=27).poll()
+                zk.door[3].reader.events.only(card=card, event_type=27).poll()
                 print(f"{ip} SUCCESS ON TRY #2")
         except Exception as ex:
             print(str(ex))
