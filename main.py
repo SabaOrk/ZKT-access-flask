@@ -1,5 +1,6 @@
 from pyzkaccess import ZKAccess, ZK200, ZK100, ZK400
 from pyzkaccess.tables import User
+from datetime import datetime
 
 connstr = "protocol=TCP,ipaddress=149.3.34.167,port=4370,timeout=10000,passwd="
 
@@ -8,7 +9,7 @@ def add_user(card, pin, ip):
     connstr = f"protocol=TCP,ipaddress={ip},port=4370,timeout=4000,passwd="
     try:
         with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
-            user = User(card=card, pin=pin,
+            user = User(card=card, pin=pin, start_date=datetime.now(),
                         super_authorize=True).with_zk(zk)
             user.save()
             # zk.doors[0].reader.events.poll()
@@ -25,7 +26,7 @@ def add_user(card, pin, ip):
         print('TRY #2')
         try:
             with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
-                user = User(card=card, pin=pin,
+                user = User(card=card, pin=pin, start_date=datetime.now(),
                             super_authorize=True).with_zk(zk)
                 user.save()
                 # zk.doors[0].reader.events.poll()
