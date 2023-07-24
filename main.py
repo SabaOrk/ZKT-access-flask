@@ -21,7 +21,7 @@ def add_user(card, pin, ip):
             # zk.doors[2].reader.events.only(card=card, event_type=27).poll()
             # zk.doors[3].reader.events.only(card=card, event_type=27).poll()
             # zk.restart()
-            print(f"{ip} SUCCESS")
+            print(f"IP: {ip} CARD: {card} SUCCESS")
     except Exception as ex:
         print('TRY #2')
         try:
@@ -38,7 +38,7 @@ def add_user(card, pin, ip):
                 # zk.doors[2].reader.events.only(card=card, event_type=27).poll()
                 # zk.doors[3].reader.events.only(card=card, event_type=27).poll()
                 # zk.restart()
-                print(f"{ip} SUCCESS ON TRY #2")
+                print(f"IP: {ip} CARD: {card} SUCCESS ON TRY #2")
         except Exception as ex:
             print(str(ex))
             return False
