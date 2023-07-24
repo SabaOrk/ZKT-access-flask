@@ -9,7 +9,7 @@ def add_user(card, pin, ip):
     connstr = f"protocol=TCP,ipaddress={ip},port=4370,timeout=4000,passwd="
     try:
         with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
-            user = User(card=card, pin=pin, start_date=datetime.now(),
+            user = User(card=card, pin=pin, start_time=datetime.now(),
                         super_authorize=True).with_zk(zk)
             user.save()
             # zk.doors[0].reader.events.poll()
@@ -26,7 +26,7 @@ def add_user(card, pin, ip):
         print('TRY #2')
         try:
             with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
-                user = User(card=card, pin=pin, start_date=datetime.now(),
+                user = User(card=card, pin=pin, start_time=datetime.now(),
                             super_authorize=True).with_zk(zk)
                 user.save()
                 # zk.doors[0].reader.events.poll()
