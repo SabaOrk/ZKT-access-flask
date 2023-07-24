@@ -9,7 +9,7 @@ def add_user(card, pin, ip):
     try:
         with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
             user = User(card=card, pin=pin,
-                        super_authorize=False).with_zk(zk)
+                        super_authorize=True).with_zk(zk)
             user.save()
             # zk.doors[0].reader.events.poll()
             # zk.doors[1].reader.events.poll()
@@ -26,7 +26,7 @@ def add_user(card, pin, ip):
         try:
             with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
                 user = User(card=card, pin=pin,
-                            super_authorize=False).with_zk(zk)
+                            super_authorize=True).with_zk(zk)
                 user.save()
                 # zk.doors[0].reader.events.poll()
                 # zk.doors[1].reader.events.poll()
@@ -49,7 +49,7 @@ def delete_user(card, pin, ip):
     try:
         with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
             user = User(card=card, pin=pin,
-                        super_authorize=False).with_zk(zk)
+                        super_authorize=True).with_zk(zk)
             user.delete()
             # zk.events.refresh()
             print(f"{ip} SUCCESS")
@@ -58,7 +58,7 @@ def delete_user(card, pin, ip):
         try:
             with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
                 user = User(card=card, pin=pin,
-                            super_authorize=False).with_zk(zk)
+                            super_authorize=True).with_zk(zk)
                 user.delete()
                 # zk.events.refresh()
                 print(f"{ip} SUCCESS ON TRY #2")
