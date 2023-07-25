@@ -12,16 +12,9 @@ def add_user(card, pin, ip):
             user = User(card=card, pin=pin, start_time=datetime.now(),
                         super_authorize=True).with_zk(zk)
             user.save()
-            # zk.doors[0].reader.events.poll()
-            # zk.doors[1].reader.events.poll()
-            # zk.doors[2].reader.events.poll()
-            # zk.doors[3].reader.events.poll()
-            # zk.doors[0].reader.events.only(card=card, event_type=23).poll()
-            # zk.doors[1].reader.events.only(card=card, event_type=27).poll()
-            # zk.doors[2].reader.events.only(card=card, event_type=27).poll()
-            # zk.doors[3].reader.events.only(card=card, event_type=27).poll()
-            # zk.restart()
-            print(f"IP: {ip} CARD: {card} SUCCESS")
+            zk.aux_inputs.events.refresh()
+            zk.aux_inputs[0:3].events.poll()
+            print(f"IP: {ip} CARD: {card} ADDED SUCCESS")
     except Exception as ex:
         print('TRY #2')
         try:
@@ -29,16 +22,9 @@ def add_user(card, pin, ip):
                 user = User(card=card, pin=pin, start_time=datetime.now(),
                             super_authorize=True).with_zk(zk)
                 user.save()
-                # zk.doors[0].reader.events.poll()
-                # zk.doors[1].reader.events.poll()
-                # zk.doors[2].reader.events.poll()
-                # zk.doors[3].reader.events.poll()
-                # zk.doors[0].reader.events.only(card=card, event_type=23).poll()
-                # zk.doors[1].reader.events.only(card=card, event_type=27).poll()
-                # zk.doors[2].reader.events.only(card=card, event_type=27).poll()
-                # zk.doors[3].reader.events.only(card=card, event_type=27).poll()
-                # zk.restart()
-                print(f"IP: {ip} CARD: {card} SUCCESS ON TRY #2")
+                zk.aux_inputs.events.refresh()
+                zk.aux_inputs[0:3].events.poll()
+                print(f"IP: {ip} CARD: {card} ADDED SUCCESS ON TRY #2")
         except Exception as ex:
             print(str(ex))
             return False
@@ -52,8 +38,9 @@ def delete_user(card, pin, ip):
             user = User(card=card, pin=pin,
                         super_authorize=True).with_zk(zk)
             user.delete()
-            # zk.events.refresh()
-            print(f"{ip} SUCCESS")
+            zk.aux_inputs.events.refresh()
+            zk.aux_inputs[0:3].events.poll()
+            print(f"IP: {ip} CARD: {card} REMOVED SUCCESS")
     except Exception as ex:
         print('TRY #2')
         try:
@@ -61,8 +48,9 @@ def delete_user(card, pin, ip):
                 user = User(card=card, pin=pin,
                             super_authorize=True).with_zk(zk)
                 user.delete()
-                # zk.events.refresh()
-                print(f"{ip} SUCCESS ON TRY #2")
+                zk.aux_inputs.events.refresh()
+                zk.aux_inputs[0:3].events.poll()
+                print(f"IP: {ip} CARD: {card} REMOVED SUCCESS ON TRY #2")
         except Exception as ex:
             print(str(ex))
             return False
