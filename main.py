@@ -12,8 +12,8 @@ def add_user(card, pin, ip):
             user = User(card=card, pin=pin, start_time=datetime.now(),
                         super_authorize=True).with_zk(zk)
             user.save()
-            zk.aux_inputs.events.refresh()
-            zk.aux_inputs[0:3].events.poll()
+            # zk.aux_inputs.events.refresh()
+            # zk.aux_inputs[0:3].events.poll()
             print(f"IP: {ip} CARD: {card} ADDED SUCCESS")
     except Exception as ex:
         print('TRY #2')
@@ -22,8 +22,8 @@ def add_user(card, pin, ip):
                 user = User(card=card, pin=pin, start_time=datetime.now(),
                             super_authorize=True).with_zk(zk)
                 user.save()
-                zk.aux_inputs.events.refresh()
-                zk.aux_inputs[0:3].events.poll()
+                # zk.aux_inputs.events.refresh()
+                # zk.aux_inputs[0:3].events.poll()
                 print(f"IP: {ip} CARD: {card} ADDED SUCCESS ON TRY #2")
         except Exception as ex:
             print(str(ex))
