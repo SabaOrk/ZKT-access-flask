@@ -14,6 +14,7 @@ def home():
 def disable():
     body = request.json
     ip = body.get('ip')
+    port = body.get('port')
     #TODO
     return jsonify({
         "success": res,
@@ -23,6 +24,7 @@ def disable():
 def enable():
     body = request.json
     ip = body.get('ip')
+    port = body.get('port')
     #TODO
     return jsonify({
         "success": res,
@@ -45,7 +47,8 @@ def set_user():
     card = body.get('card')
     pin = body.get('pin')
     ip = body.get('ip')
-    res = add_user(card=card, pin=pin, ip=ip)
+    port = body.get('port')
+    res = add_user(card=card, pin=pin, ip=ip, port=port)
     return jsonify({
         "success": res,
     })
@@ -57,7 +60,8 @@ def remove_user():
     card = body.get('card')
     pin = body.get('pin')
     ip = body.get('ip')
-    res = delete_user(card, pin, ip)
+    port = body.get('port')
+    res = delete_user(card, pin, ip, port)
     return jsonify({
         "success": res,
     })
@@ -67,7 +71,8 @@ def remove_user():
 def users():
     body = request.json
     ip = body.get('ip')
-    res = get_users(ip)
+    port = body.get('port')
+    res = get_users(ip, port)
     return jsonify({
         "users": res,
     })
