@@ -28,6 +28,7 @@ def write_log(text):
         logFile.close()
 
 def add_user(card, pin, ip, port = 470):
+    print(port)
     connstr = f"protocol=TCP,ipaddress={ip},port={port},timeout=4000,passwd="
     try:
         autorized = False
@@ -78,7 +79,8 @@ def add_user(card, pin, ip, port = 470):
 
 
 
-def delete_user(card, pin, ip, port = 4370):
+def delete_user(card, pin, ip, port):
+    print("shignit", port)
     connstr = f"protocol=TCP,ipaddress={ip},port={port},timeout=4000,passwd="
     try:
         with ZKAccess(connstr=connstr, device_model=ZK200) as zk:

@@ -48,6 +48,7 @@ def set_user():
     pin = body.get('pin')
     ip = body.get('ip')
     port = body.get('port')
+    print("app", port)
     res = add_user(card=card, pin=pin, ip=ip, port=port)
     return jsonify({
         "success": res,
@@ -61,6 +62,7 @@ def remove_user():
     pin = body.get('pin')
     ip = body.get('ip')
     port = body.get('port')
+    print("app", port)
     res = delete_user(card, pin, ip, port)
     return jsonify({
         "success": res,
