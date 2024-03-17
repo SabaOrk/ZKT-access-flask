@@ -7,7 +7,7 @@ import time
 connstr = "protocol=TCP,ipaddress=149.3.34.167,port=4370,timeout=10000,passwd="
 
 
-def ping_host(host):
+def ping_host(ip):
     try:
         rtt = ping3.ping(ip)
         if rtt is not None and rtt is not False:
