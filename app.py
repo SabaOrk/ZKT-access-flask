@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
-from main import add_user, delete_user, get_users
+from main import add_user, delete_user, get_users, ping_host_endpoint
+from queue_manager import add_request
 
 app = Flask(__name__)
 
@@ -9,6 +10,14 @@ def home():
         "success": True
     })
 
+@app.route('/ping/', methods = ['POST'])
+def ping_host():
+    body = request.json
+    ip = body.get('ip')
+    res = ping_host_endpoint(ip)
+    return jsonify({
+        "success": res,
+    })
 
 @app.route('/controller/disable/')
 def disable():
@@ -49,9 +58,12 @@ def set_user():
     ip = body.get('ip')
     port = body.get('port')
     print("app", port)
-    res = add_user(card=card, pin=pin, ip=ip, port=port)
+
+    add_request(card=card, pin=pin, ip=ip, port=port, operation='add')
+    
     return jsonify({
-        "success": res,
+        "success": True,
+        "message": "User creation request has been queued",
     })
 
     
@@ -63,9 +75,12 @@ def remove_user():
     ip = body.get('ip')
     port = body.get('port')
     print("app", port)
-    res = delete_user(card, pin, ip, port)
+
+    add_request(card=card, pin=pin, ip=ip, port=port, operation='delete')
+    
     return jsonify({
-        "success": res,
+        "success": True,
+        "message": "User deletion request has been queued",
     })
     
     
