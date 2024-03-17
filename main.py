@@ -11,11 +11,11 @@ def ping_host(ip):
     try:
         rtt = ping3.ping(ip)
         if rtt is not None and rtt is not False:
-            print(print(f"Ping successful. Round-trip time: {rtt} ms"))
-            return True
+            print(f"Ping successful. Round-trip time: {rtt} ms")
+            return f"Ping successful. Round-trip time: {rtt} ms"
         else:
             print('Ping Failed')
-            return False
+            return 'Ping Failed'
     except Exception as e:
         print(f"An error occurred: {str(e)}")
 
@@ -23,7 +23,7 @@ def ping_host_endpoint(ip):
     try:
         rtt = ping3.ping(ip)
         if rtt is not None and rtt is not False:
-            print(print(f"Ping successful. Round-trip time: {rtt} ms"))
+            print(f"Ping successful. Round-trip time: {rtt} ms")
             return True
         else:
             print('Ping Failed')
