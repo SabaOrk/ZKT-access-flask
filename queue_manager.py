@@ -2,6 +2,7 @@ from queue import Queue
 from threading import Thread, Lock
 from main import add_user as add_user_func
 from main import delete_user as delete_user_func
+from main import get_users as get_users_func
 
 # Define the queue and lock for thread safety
 request_queue = Queue()
@@ -19,6 +20,8 @@ def process_requests():
                 add_user(card, pin, ip, port)
             elif operation == 'delete':
                 delete_user(card, pin, ip, port)
+            elif operation == 'list':
+                get_users(ip, port)
             request_queue.task_done()
         except Exception as e:
             print(f"An error occurred: {str(e)}")
@@ -36,6 +39,11 @@ def add_user(card, pin, ip, port):
 def delete_user(card, pin, ip, port):
     with lock:
         delete_user_func(card, pin, ip, port)
+
+# Function to handle getting users
+def get_users(ip, port):
+    with lock:
+        return get_users_func(ip, port)
 
 # Start the thread to process requests
 thread = Thread(target=process_requests)
