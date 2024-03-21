@@ -15,6 +15,7 @@ def ping_host():
     body = request.json
     ip = body.get('ip')
     res = ping_host_endpoint(ip)
+    print(f"Ping successful on host: {ip}")
     return jsonify({
         "success": res,
     })
@@ -90,9 +91,10 @@ def users():
     ip = body.get('ip')
     port = body.get('port')
     res = get_users(ip, port)
+    print(f"returned users: {res}")
     return jsonify({
         "users": res,
     })
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
