@@ -32,9 +32,17 @@ def ping_host_endpoint(ip):
         print(f"An error occurred: {str(e)}")
 
 def write_log(text):
-    with open('log.txt', 'a') as logFile:
+    with open('logs/exeptions.txt', 'a') as logFile:
         dr = str(datetime.now())+' - '
-        text = dr+text
+        text = dr + text
+        logFile.write(text)
+        logFile.write('\n')
+        logFile.close()
+
+def write_log_success(text):
+    with open('logs/success.txt', 'a') as logFile:
+        dr = str(datetime.now())+' - '
+        text = dr + text
         logFile.write(text)
         logFile.write('\n')
         logFile.close()
@@ -51,6 +59,8 @@ def add_user(card, pin, ip, port = 470):
             # zk.aux_inputs.events.refresh()
             # zk.aux_inputs[0:3].events.poll()
             print(f"IP: {ip} CARD: {card} ADDED SUCCESS")
+
+            write_log_success(f"IP: {ip} CARD: {card} ADDED SUCCESS ON TRY #1")
         
             for UserAuthorizeRecord in zk.table('UserAuthorize'):
                 if UserAuthorizeRecord.pin == pin:
@@ -73,6 +83,8 @@ def add_user(card, pin, ip, port = 470):
                 # zk.aux_inputs.events.refresh()
                 # zk.aux_inputs[0:3].events.poll()
                 print(f"IP: {ip} CARD: {card} ADDED SUCCESS")
+
+                write_log_success(f"IP: {ip} CARD: {card} ADDED SUCCESS ON TRY #2")
         
                 for UserAuthorizeRecord in zk.table('UserAuthorize'):
                     if UserAuthorizeRecord.pin == pin:
@@ -84,7 +96,7 @@ def add_user(card, pin, ip, port = 470):
                     print('Authorized To All Doors') 
         except Exception as ex:
             print(str(ex))
-            text = str(ex) + '\n'+ping_host(ip)
+            text = f"Exception when adding user! Device: {ip} - {str(ex)} + '\n' + {ping_host(ip)}"
             write_log(text)
             return False
     return True
@@ -102,6 +114,8 @@ def delete_user(card, pin, ip, port):
             # zk.aux_inputs.events.refresh()
             # zk.aux_inputs[0:3].events.poll()
             print(f"IP: {ip} CARD: {card} REMOVED SUCCESS")
+
+            write_log_success(f"IP: {ip} CARD: {card} REMOVED SUCCESS ON TRY #1")
     except Exception as ex:
         print('TRY #2')
         try:
@@ -112,9 +126,11 @@ def delete_user(card, pin, ip, port):
                 # zk.aux_inputs.events.refresh()
                 # zk.aux_inputs[0:3].events.poll()
                 print(f"IP: {ip} CARD: {card} REMOVED SUCCESS ON TRY #2")
+
+                write_log_success(f"IP: {ip} CARD: {card} REMOVED SUCCESS ON TRY #2")
         except Exception as ex:
             print(str(ex))
-            text = str(ex) + '\n'+ping_host(ip)
+            text = f"Exception when deleting user! Device: {ip} - {str(ex)} + '\n' + {ping_host(ip)}"
             write_log(text)
             return False
     return True
@@ -131,6 +147,7 @@ def get_users(ip, port):
                                     "pin": record.pin,
                                    }
     except Exception as ex:
-        print(str(ex))
+        text = f"Exeption when retrieving user lists! Device: {ip} - {str(ex)} + '\n' + {ping_host(ip)}"
+        write_log(text)
         return {}
     return res
