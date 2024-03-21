@@ -90,7 +90,7 @@ def users():
     body = request.json
     ip = body.get('ip')
     port = body.get('port')
-    add_request(card=None, pin=None, ip=ip, port=port, operation='list')
+    res = get_users(ip, port)
     print(f"returned users: {res}")
     return jsonify({
         "users": res,
