@@ -92,7 +92,7 @@ def users():
     ip = body.get('ip')
     port = body.get('port')
     res = get_users(ip, port)
-    print(f"returned users: {res}")
+    print(f"returned {len(res)} users from host: {ip}")
     return jsonify({
         "users": res,
     })
