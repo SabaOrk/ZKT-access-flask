@@ -76,7 +76,6 @@ def remove_user():
     pin = body.get('pin')
     ip = body.get('ip')
     port = body.get('port')
-    print("app", port)
 
     add_request(card=card, pin=pin, ip=ip, port=port, operation='delete')
     
