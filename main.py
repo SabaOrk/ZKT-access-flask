@@ -95,8 +95,8 @@ def add_user(card, pin, ip, port = 470):
                     userAuthorize.save()
                     print('Authorized To All Doors') 
         except Exception as ex:
-            print(str(ex))
             text = f"Exception when adding user! Device: {ip} - {str(ex)} + '\n' + {ping_host(ip)}"
+            print(text)
             write_log(text)
             return False
     return True
@@ -104,7 +104,6 @@ def add_user(card, pin, ip, port = 470):
 
 
 def delete_user(card, pin, ip, port):
-    print("shignit", port)
     connstr = f"protocol=TCP,ipaddress={ip},port={port},timeout=4000,passwd="
     try:
         with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
@@ -129,8 +128,8 @@ def delete_user(card, pin, ip, port):
 
                 write_log_success(f"IP: {ip} CARD: {card} REMOVED SUCCESS ON TRY #2")
         except Exception as ex:
-            print(str(ex))
             text = f"Exception when deleting user! Device: {ip} - {str(ex)} + '\n' + {ping_host(ip)}"
+            print(text)
             write_log(text)
             return False
     return True
@@ -140,6 +139,7 @@ def get_users(ip, port):
     connstr = f"protocol=TCP,ipaddress={ip},port={port},timeout=4000,passwd="
     res = {}
     try:
+        print("TRY #1 GETTING USERS ON DEVICE: ", ip)
         with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
             for record in zk.table('User'):
                 res[record.pin] = {
@@ -147,7 +147,20 @@ def get_users(ip, port):
                                     "pin": record.pin,
                                    }
     except Exception as ex:
-        text = f"Exeption when retrieving user lists! Device: {ip} - {str(ex)} + '\n' + {ping_host(ip)}"
+        text = f"Exeption when retrieving user lists on try #1! Device: {ip} - {str(ex)} + '\n' + {ping_host(ip)}"
+        print(text)
         write_log(text)
-        return {}
+        print("TRY #2 GETTING USERS ON DEVICE: ", ip)
+        try:
+            with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
+                for record in zk.table('User'):
+                    res[record.pin] = {
+                                        "card": record.card,
+                                        "pin": record.pin,
+                                    }
+        except Exception as ex:
+            text = f"Exeption when retrieving user lists on try #2! Device: {ip} - {str(ex)} + '\n' + {ping_host(ip)}"
+            print(text)
+            write_log(text)
+            return {}
     return res
