@@ -48,7 +48,7 @@ def write_log_success(text):
         logFile.close()
 
 def add_user(card, pin, ip, port = 470):
-    print(port)
+    print(f"Adding user with card: {card} and pin: {pin} on device with ip: {ip} on TRY #1")
     connstr = f"protocol=TCP,ipaddress={ip},port={port},timeout=4000,passwd="
     try:
         autorized = False
@@ -73,7 +73,7 @@ def add_user(card, pin, ip, port = 470):
         
     except Exception as ex:
         print(ex)
-        print('TRY #2')
+        print(f"Adding user with card: {card} and pin: {pin} on device with ip: {ip} on TRY #2")
         try:
             autorized = False
             with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
@@ -104,6 +104,7 @@ def add_user(card, pin, ip, port = 470):
 
 
 def delete_user(card, pin, ip, port):
+    print(f"Removing user with card: {card} and pin: {pin} on device with ip: {ip} on TRY #1")
     connstr = f"protocol=TCP,ipaddress={ip},port={port},timeout=4000,passwd="
     try:
         with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
@@ -116,7 +117,8 @@ def delete_user(card, pin, ip, port):
 
             write_log_success(f"IP: {ip} CARD: {card} REMOVED SUCCESS ON TRY #1")
     except Exception as ex:
-        print('TRY #2')
+        print(ex)
+        print(f"Removing user with card: {card} and pin: {pin} on device with ip: {ip} on TRY #2")
         try:
             with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
                 user = User(card=card, pin=pin,
