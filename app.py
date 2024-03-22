@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    pring("Server received an empty request")
+    print("Server received an empty request")
     return jsonify({
         "success": True
     })
