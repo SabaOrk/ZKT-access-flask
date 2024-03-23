@@ -16,20 +16,25 @@ def add_user(card, pin, ip):
             user.save()
             # zk.aux_inputs.events.refresh()
             # zk.aux_inputs[0:3].events.poll()
-            print(f"IP: {ip} CARD: {card} ADDED SUCCESS")
+            with open('output.txt', 'a') as output:
+        output.write(f"IP: {ip} CARD: {card} ADDED SUCCESS")
         
             for UserAuthorizeRecord in zk.table('UserAuthorize'):
                 if UserAuthorizeRecord.pin == pin:
                     autorized = True
-                    print('almost authorized')
+                    with open('output.txt', 'a') as output:
+        output.write('almost authorized')
             if  autorized == False:
                 userAuthorize = UserAuthorize(pin=pin,timezone_id=1,doors=(True, True, True, True)).with_zk(zk)
                 userAuthorize.save()
-                print('Authorized To All Doors') 
+                with open('output.txt', 'a') as output:
+        output.write('Authorized To All Doors') 
         
     except Exception as ex:
-        print(ex)
-        print('TRY #2')
+        with open('output.txt', 'a') as output:
+        output.write(ex)
+        with open('output.txt', 'a') as output:
+        output.write('TRY #2')
         try:
             autorized = False
             with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
@@ -38,18 +43,22 @@ def add_user(card, pin, ip):
                 user.save()
                 # zk.aux_inputs.events.refresh()
                 # zk.aux_inputs[0:3].events.poll()
-                print(f"IP: {ip} CARD: {card} ADDED SUCCESS")
+                with open('output.txt', 'a') as output:
+        output.write(f"IP: {ip} CARD: {card} ADDED SUCCESS")
         
                 for UserAuthorizeRecord in zk.table('UserAuthorize'):
                     if UserAuthorizeRecord.pin == pin:
                         autorized = True
-                        print('almost authorized')
+                        with open('output.txt', 'a') as output:
+        output.write('almost authorized')
                 if  autorized == False:
                     userAuthorize = UserAuthorize(pin=pin,timezone_id=1,doors=(True, True, True, True)).with_zk(zk)
                     userAuthorize.save()
-                    print('Authorized To All Doors') 
+                    with open('output.txt', 'a') as output:
+        output.write('Authorized To All Doors') 
         except Exception as ex:
-            print(str(ex))
+            with open('output.txt', 'a') as output:
+        output.write(str(ex))
             return False
     return True
 
@@ -64,9 +73,11 @@ def delete_user(card, pin, ip):
             user.delete()
             # zk.aux_inputs.events.refresh()
             # zk.aux_inputs[0:3].events.poll()
-            print(f"IP: {ip} CARD: {card} REMOVED SUCCESS")
+            with open('output.txt', 'a') as output:
+        output.write(f"IP: {ip} CARD: {card} REMOVED SUCCESS")
     except Exception as ex:
-        print('TRY #2')
+        with open('output.txt', 'a') as output:
+        output.write('TRY #2')
         try:
             with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
                 user = User(card=card, pin=pin,
@@ -74,9 +85,11 @@ def delete_user(card, pin, ip):
                 user.delete()
                 # zk.aux_inputs.events.refresh()
                 # zk.aux_inputs[0:3].events.poll()
-                print(f"IP: {ip} CARD: {card} REMOVED SUCCESS ON TRY #2")
+                with open('output.txt', 'a') as output:
+        output.write(f"IP: {ip} CARD: {card} REMOVED SUCCESS ON TRY #2")
         except Exception as ex:
-            print(str(ex))
+            with open('output.txt', 'a') as output:
+        output.write(str(ex))
             return False
     return True
 
@@ -92,6 +105,7 @@ def get_users(ip):
                                     "pin": record.pin,
                                    }
     except Exception as ex:
-        print(str(ex))
+        with open('output.txt', 'a') as output:
+        output.write(str(ex))
         return {}
     return res

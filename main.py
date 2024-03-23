@@ -6,31 +6,36 @@ import time
 import sys
 
 connstr = "protocol=TCP,ipaddress=149.3.34.167,port=4370,timeout=10000,passwd="
-sys.stdout = open('logs/my_flask_app_logs.log', 'a')
 
 def ping_host(ip):
     try:
         rtt = ping3.ping(ip)
         if rtt is not None and rtt is not False:
-            print(f"Ping successful. Round-trip time: {rtt} ms")
+            with open('output.txt', 'a') as output:
+                output.write(f"Ping successful. Round-trip time: {rtt} ms")
             return f"Ping successful. Round-trip time: {rtt} ms"
         else:
-            print('Ping Failed')
+            with open('output.txt', 'a') as output:
+                output.write('Ping Failed')
             return 'Ping Failed'
     except Exception as e:
-        print(f"An error occurred: {str(e)}")
+        with open('output.txt', 'a') as output:
+            output.write(f"An error occurred: {str(e)}")
 
 def ping_host_endpoint(ip):
     try:
         rtt = ping3.ping(ip)
         if rtt is not None and rtt is not False:
-            print(f"Ping successful. Round-trip time: {rtt} ms")
+            with open('output.txt', 'a') as output:
+                output.write(f"Ping successful. Round-trip time: {rtt} ms")
             return True
         else:
-            print('Ping Failed')
+            with open('output.txt', 'a') as output:
+                output.write('Ping Failed')
             return False
     except Exception as e:
-        print(f"An error occurred: {str(e)}")
+        with open('output.txt', 'a') as output:
+            output.write(f"An error occurred: {str(e)}")
 
 def write_log(text):
     with open('logs/exeptions.txt', 'a') as logFile:
@@ -49,7 +54,8 @@ def write_log_success(text):
         logFile.close()
 
 def add_user(card, pin, ip, port = 470):
-    print(f"Adding user with card: {card} and pin: {pin} on device with ip: {ip} on TRY #1")
+    with open('output.txt', 'a') as output:
+        output.write(f"Adding user with card: {card} and pin: {pin} on device with ip: {ip} on TRY #1")
     connstr = f"protocol=TCP,ipaddress={ip},port={port},timeout=4000,passwd="
     try:
         autorized = False
@@ -59,22 +65,27 @@ def add_user(card, pin, ip, port = 470):
             user.save()
             # zk.aux_inputs.events.refresh()
             # zk.aux_inputs[0:3].events.poll()
-            print(f"IP: {ip} CARD: {card} ADDED SUCCESS")
+            with open('output.txt', 'a') as output:
+                output.write(f"IP: {ip} CARD: {card} ADDED SUCCESS")
 
             write_log_success(f"IP: {ip} CARD: {card} ADDED SUCCESS ON TRY #1")
         
             for UserAuthorizeRecord in zk.table('UserAuthorize'):
                 if UserAuthorizeRecord.pin == pin:
                     autorized = True
-                    print('almost authorized')
+                    with open('output.txt', 'a') as output:
+                        output.write('Almost authorized')
             if  autorized == False:
                 userAuthorize = UserAuthorize(pin=pin,timezone_id=1,doors=(True, True, True, True)).with_zk(zk)
                 userAuthorize.save()
-                print('Authorized To All Doors') 
-        
+                with open('output.txt', 'a') as output:
+                    output.write('Authorized To All Doors') 
+        return True
     except Exception as ex:
-        print(ex)
-        print(f"Adding user with card: {card} and pin: {pin} on device with ip: {ip} on TRY #2")
+        with open('output.txt', 'a') as output:
+            output.write(ex)
+        with open('output.txt', 'a') as output:
+            output.write(f"Adding user with card: {card} and pin: {pin} on device with ip: {ip} on TRY #2")
         try:
             autorized = False
             with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
@@ -83,21 +94,26 @@ def add_user(card, pin, ip, port = 470):
                 user.save()
                 # zk.aux_inputs.events.refresh()
                 # zk.aux_inputs[0:3].events.poll()
-                print(f"IP: {ip} CARD: {card} ADDED SUCCESS")
+                with open('output.txt', 'a') as output:
+                    output.write(f"IP: {ip} CARD: {card} ADDED SUCCESS")
 
                 write_log_success(f"IP: {ip} CARD: {card} ADDED SUCCESS ON TRY #2")
         
                 for UserAuthorizeRecord in zk.table('UserAuthorize'):
                     if UserAuthorizeRecord.pin == pin:
                         autorized = True
-                        print('almost authorized')
+                        with open('output.txt', 'a') as output:
+                            output.write('Almost authorized')
                 if  autorized == False:
                     userAuthorize = UserAuthorize(pin=pin,timezone_id=1,doors=(True, True, True, True)).with_zk(zk)
                     userAuthorize.save()
-                    print('Authorized To All Doors') 
+                    with open('output.txt', 'a') as output:
+                        output.write('Authorized To All Doors') 
+            return True
         except Exception as ex:
             text = f"Exception when adding user! Device: {ip} - {str(ex)} + '\n' + {ping_host(ip)}"
-            print(text)
+            with open('output.txt', 'a') as output:
+                output.write(text)
             write_log(text)
             return False
     return True
@@ -105,7 +121,8 @@ def add_user(card, pin, ip, port = 470):
 
 
 def delete_user(card, pin, ip, port):
-    print(f"Removing user with card: {card} and pin: {pin} on device with ip: {ip} on TRY #1")
+    with open('output.txt', 'a') as output:
+        output.write(f"Removing user with card: {card} and pin: {pin} on device with ip: {ip} on TRY #1")
     connstr = f"protocol=TCP,ipaddress={ip},port={port},timeout=4000,passwd="
     try:
         with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
@@ -114,12 +131,16 @@ def delete_user(card, pin, ip, port):
             user.delete()
             # zk.aux_inputs.events.refresh()
             # zk.aux_inputs[0:3].events.poll()
-            print(f"IP: {ip} CARD: {card} REMOVED SUCCESS")
+            with open('output.txt', 'a') as output:
+                output.write(f"IP: {ip} CARD: {card} REMOVED SUCCESS")
 
             write_log_success(f"IP: {ip} CARD: {card} REMOVED SUCCESS ON TRY #1")
+        return True
     except Exception as ex:
-        print(ex)
-        print(f"Removing user with card: {card} and pin: {pin} on device with ip: {ip} on TRY #2")
+        with open('output.txt', 'a') as output:
+            output.write(ex)
+        with open('output.txt', 'a') as output:
+            output.write(f"Removing user with card: {card} and pin: {pin} on device with ip: {ip} on TRY #2")
         try:
             with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
                 user = User(card=card, pin=pin,
@@ -127,12 +148,15 @@ def delete_user(card, pin, ip, port):
                 user.delete()
                 # zk.aux_inputs.events.refresh()
                 # zk.aux_inputs[0:3].events.poll()
-                print(f"IP: {ip} CARD: {card} REMOVED SUCCESS ON TRY #2")
+                with open('output.txt', 'a') as output:
+                    output.write(f"IP: {ip} CARD: {card} REMOVED SUCCESS ON TRY #2")
 
                 write_log_success(f"IP: {ip} CARD: {card} REMOVED SUCCESS ON TRY #2")
+            return True
         except Exception as ex:
             text = f"Exception when deleting user! Device: {ip} - {str(ex)} + '\n' + {ping_host(ip)}"
-            print(text)
+            with open('output.txt', 'a') as output:
+                output.write(text)
             write_log(text)
             return False
     return True
@@ -142,7 +166,8 @@ def get_users(ip, port):
     connstr = f"protocol=TCP,ipaddress={ip},port={port},timeout=4000,passwd="
     res = {}
     try:
-        print("TRY #1 GETTING USERS ON DEVICE: ", ip)
+        with open('output.txt', 'a') as output:
+            output.write("TRY #1 GETTING USERS ON DEVICE: ", ip)
         with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
             for record in zk.table('User'):
                 res[record.pin] = {
@@ -151,9 +176,11 @@ def get_users(ip, port):
                                    }
     except Exception as ex:
         text = f"Exeption when retrieving user lists on try #1! Device: {ip} - {str(ex)} + '\n' + {ping_host(ip)}"
-        print(text)
+        with open('output.txt', 'a') as output:
+            output.write(text)
         write_log(text)
-        print("TRY #2 GETTING USERS ON DEVICE: ", ip)
+        with open('output.txt', 'a') as output:
+            output.write("TRY #2 GETTING USERS ON DEVICE: ", ip)
         try:
             with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
                 for record in zk.table('User'):
@@ -163,7 +190,8 @@ def get_users(ip, port):
                                     }
         except Exception as ex:
             text = f"Exeption when retrieving user lists on try #2! Device: {ip} - {str(ex)} + '\n' + {ping_host(ip)}"
-            print(text)
+            with open('output.txt', 'a') as output:
+                output.write(text)
             write_log(text)
             return {}
     return res

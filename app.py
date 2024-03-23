@@ -7,7 +7,6 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    print("Server received an empty request")
     with open('output.txt', 'a') as output:
         output.write("Server received an empty request")
     return jsonify({
@@ -19,40 +18,41 @@ def ping_host():
     body = request.json
     ip = body.get('ip')
     res = ping_host_endpoint(ip)
-    print(f"Ping successful on host: {ip}")
+    with open('output.txt', 'a') as output:
+        output.write(f"Ping successful on host: {ip}")
     return jsonify({
         "success": res,
     })
 
-@app.route('/controller/disable/')
-def disable():
-    body = request.json
-    ip = body.get('ip')
-    port = body.get('port')
-    #TODO
-    return jsonify({
-        "success": res,
-    })
+# @app.route('/controller/disable/')
+# def disable():
+#     body = request.json
+#     ip = body.get('ip')
+#     port = body.get('port')
+#     #TODO
+#     return jsonify({
+#         "success": res,
+#     })
 
-@app.route('/controller/enable/')
-def enable():
-    body = request.json
-    ip = body.get('ip')
-    port = body.get('port')
-    #TODO
-    return jsonify({
-        "success": res,
-    })
+# @app.route('/controller/enable/')
+# def enable():
+#     body = request.json
+#     ip = body.get('ip')
+#     port = body.get('port')
+#     #TODO
+#     return jsonify({
+#         "success": res,
+#     })
     
     
-@app.route('/controller/restart/')
-def restart():
-    body = request.json
-    ip = body.get('ip')
-    #TODO
-    return jsonify({
-        "success": res,
-    })
+# @app.route('/controller/restart/')
+# def restart():
+#     body = request.json
+#     ip = body.get('ip')
+#     #TODO
+#     return jsonify({
+#         "success": res,
+#     })
 
 
 @app.route('/controller/user/set/', methods = ['POST'])
@@ -62,13 +62,14 @@ def set_user():
     pin = body.get('pin')
     ip = body.get('ip')
     port = body.get('port')
-    print("app", port)
+    with open('output.txt', 'a') as output:
+        output.write("app", port)
 
-    add_request(card=card, pin=pin, ip=ip, port=port, operation='add')
+    res = add_user(card=card, pin=pin, ip=ip, port=port)
     
     return jsonify({
         "success": True,
-        "message": "User creation request has been queued",
+        "message": "Added user successfully" if res else "Failed to add user",
     })
 
     
@@ -80,11 +81,11 @@ def remove_user():
     ip = body.get('ip')
     port = body.get('port')
 
-    add_request(card=card, pin=pin, ip=ip, port=port, operation='delete')
+    res = delete_user(card=card, pin=pin, ip=ip, port=port)
     
     return jsonify({
         "success": True,
-        "message": "User deletion request has been queued",
+        "message": "Removed user successfully" if res else "Failed to remove user",
     })
     
     
@@ -94,10 +95,11 @@ def users():
     ip = body.get('ip')
     port = body.get('port')
     res = get_users(ip, port)
-    print(f"returned {len(res)} users from host: {ip}")
+    with open('output.txt', 'a') as output:
+        output.write(f"returned {len(res)} users from host: {ip}")
     return jsonify({
         "users": res,
     })
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5555, debug=True)
+    app.run(debug=True)

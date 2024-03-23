@@ -24,7 +24,8 @@ def process_requests():
                 get_users(ip, port)
             request_queue.task_done()
         except Exception as e:
-            print(f"An error occurred: {str(e)}")
+            with open('output.txt', 'a') as output:
+        output.write(f"An error occurred: {str(e)}")
 
 # Function to add a request to the queue
 def add_request(card, pin, ip, port, operation):

@@ -7,4 +7,5 @@ try:
     # connect to device
     conn = zk.connect()
 except Exception as ex:
-    print(ex)
+    with open('output.txt', 'a') as output:
+        output.write(ex)
