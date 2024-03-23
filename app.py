@@ -8,7 +8,7 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     with open('output.txt', 'a') as output:
-        output.writeline("Server received an empty request")
+        output.write("Server received an empty request" + "\n")
     return jsonify({
         "success": True
     })
@@ -19,7 +19,7 @@ def ping_host():
     ip = body.get('ip')
     res = ping_host_endpoint(ip)
     with open('output.txt', 'a') as output:
-        output.writeline(f"Ping successful on host: {ip}")
+        output.write(f"Ping successful on host: {ip}" + "\n")
     return jsonify({
         "success": res,
     })
@@ -62,9 +62,7 @@ def set_user():
     pin = body.get('pin')
     ip = body.get('ip')
     port = body.get('port')
-    with open('output.txt', 'a') as output:
-        output.writeline("app", port)
-
+   
     res = add_user(card=card, pin=pin, ip=ip, port=port)
     
     return jsonify({
@@ -96,7 +94,7 @@ def users():
     port = body.get('port')
     res = get_users(ip, port)
     with open('output.txt', 'a') as output:
-        output.writeline(f"returned {len(res)} users from host: {ip}")
+        output.write(f"returned {len(res)} users from host: {ip}" + "\n")
     return jsonify({
         "users": res,
     })
