@@ -8,4 +8,4 @@ try:
     conn = zk.connect()
 except Exception as ex:
     with open('output.txt', 'a') as output:
-        output.write(ex)
+        output.writeline(ex)

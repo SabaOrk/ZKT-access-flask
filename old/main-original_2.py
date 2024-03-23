@@ -17,24 +17,24 @@ def add_user(card, pin, ip):
             # zk.aux_inputs.events.refresh()
             # zk.aux_inputs[0:3].events.poll()
             with open('output.txt', 'a') as output:
-        output.write(f"IP: {ip} CARD: {card} ADDED SUCCESS")
+        output.writeline(f"IP: {ip} CARD: {card} ADDED SUCCESS")
         
             for UserAuthorizeRecord in zk.table('UserAuthorize'):
                 if UserAuthorizeRecord.pin == pin:
                     autorized = True
                     with open('output.txt', 'a') as output:
-        output.write('almost authorized')
+        output.writeline('almost authorized')
             if  autorized == False:
                 userAuthorize = UserAuthorize(pin=pin,timezone_id=1,doors=(True, True, True, True)).with_zk(zk)
                 userAuthorize.save()
                 with open('output.txt', 'a') as output:
-        output.write('Authorized To All Doors') 
+        output.writeline('Authorized To All Doors') 
         
     except Exception as ex:
         with open('output.txt', 'a') as output:
-        output.write(ex)
+        output.writeline(ex)
         with open('output.txt', 'a') as output:
-        output.write('TRY #2')
+        output.writeline('TRY #2')
         try:
             autorized = False
             with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
@@ -44,21 +44,21 @@ def add_user(card, pin, ip):
                 # zk.aux_inputs.events.refresh()
                 # zk.aux_inputs[0:3].events.poll()
                 with open('output.txt', 'a') as output:
-        output.write(f"IP: {ip} CARD: {card} ADDED SUCCESS")
+        output.writeline(f"IP: {ip} CARD: {card} ADDED SUCCESS")
         
                 for UserAuthorizeRecord in zk.table('UserAuthorize'):
                     if UserAuthorizeRecord.pin == pin:
                         autorized = True
                         with open('output.txt', 'a') as output:
-        output.write('almost authorized')
+        output.writeline('almost authorized')
                 if  autorized == False:
                     userAuthorize = UserAuthorize(pin=pin,timezone_id=1,doors=(True, True, True, True)).with_zk(zk)
                     userAuthorize.save()
                     with open('output.txt', 'a') as output:
-        output.write('Authorized To All Doors') 
+        output.writeline('Authorized To All Doors') 
         except Exception as ex:
             with open('output.txt', 'a') as output:
-        output.write(str(ex))
+        output.writeline(str(ex))
             return False
     return True
 
@@ -74,10 +74,10 @@ def delete_user(card, pin, ip):
             # zk.aux_inputs.events.refresh()
             # zk.aux_inputs[0:3].events.poll()
             with open('output.txt', 'a') as output:
-        output.write(f"IP: {ip} CARD: {card} REMOVED SUCCESS")
+        output.writeline(f"IP: {ip} CARD: {card} REMOVED SUCCESS")
     except Exception as ex:
         with open('output.txt', 'a') as output:
-        output.write('TRY #2')
+        output.writeline('TRY #2')
         try:
             with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
                 user = User(card=card, pin=pin,
@@ -86,10 +86,10 @@ def delete_user(card, pin, ip):
                 # zk.aux_inputs.events.refresh()
                 # zk.aux_inputs[0:3].events.poll()
                 with open('output.txt', 'a') as output:
-        output.write(f"IP: {ip} CARD: {card} REMOVED SUCCESS ON TRY #2")
+        output.writeline(f"IP: {ip} CARD: {card} REMOVED SUCCESS ON TRY #2")
         except Exception as ex:
             with open('output.txt', 'a') as output:
-        output.write(str(ex))
+        output.writeline(str(ex))
             return False
     return True
 
@@ -106,6 +106,6 @@ def get_users(ip):
                                    }
     except Exception as ex:
         with open('output.txt', 'a') as output:
-        output.write(str(ex))
+        output.writeline(str(ex))
         return {}
     return res

@@ -15,10 +15,10 @@ def add_user(card, pin, ip):
             # zk.aux_inputs.events.refresh()
             # zk.aux_inputs[0:3].events.poll()
             with open('output.txt', 'a') as output:
-        output.write(f"IP: {ip} CARD: {card} ADDED SUCCESS")
+        output.writeline(f"IP: {ip} CARD: {card} ADDED SUCCESS")
     except Exception as ex:
         with open('output.txt', 'a') as output:
-        output.write('TRY #2')
+        output.writeline('TRY #2')
         try:
             with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
                 user = User(card=card, pin=pin, start_time=datetime.now(),
@@ -27,10 +27,10 @@ def add_user(card, pin, ip):
                 # zk.aux_inputs.events.refresh()
                 # zk.aux_inputs[0:3].events.poll()
                 with open('output.txt', 'a') as output:
-        output.write(f"IP: {ip} CARD: {card} ADDED SUCCESS ON TRY #2")
+        output.writeline(f"IP: {ip} CARD: {card} ADDED SUCCESS ON TRY #2")
         except Exception as ex:
             with open('output.txt', 'a') as output:
-        output.write(str(ex))
+        output.writeline(str(ex))
             return False
     return True
 
@@ -45,10 +45,10 @@ def delete_user(card, pin, ip):
             # zk.aux_inputs.events.refresh()
             # zk.aux_inputs[0:3].events.poll()
             with open('output.txt', 'a') as output:
-        output.write(f"IP: {ip} CARD: {card} REMOVED SUCCESS")
+        output.writeline(f"IP: {ip} CARD: {card} REMOVED SUCCESS")
     except Exception as ex:
         with open('output.txt', 'a') as output:
-        output.write('TRY #2')
+        output.writeline('TRY #2')
         try:
             with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
                 user = User(card=card, pin=pin,
@@ -57,10 +57,10 @@ def delete_user(card, pin, ip):
                 # zk.aux_inputs.events.refresh()
                 # zk.aux_inputs[0:3].events.poll()
                 with open('output.txt', 'a') as output:
-        output.write(f"IP: {ip} CARD: {card} REMOVED SUCCESS ON TRY #2")
+        output.writeline(f"IP: {ip} CARD: {card} REMOVED SUCCESS ON TRY #2")
         except Exception as ex:
             with open('output.txt', 'a') as output:
-        output.write(str(ex))
+        output.writeline(str(ex))
             return False
     return True
 
@@ -77,6 +77,6 @@ def get_users(ip):
                                    }
     except Exception as ex:
         with open('output.txt', 'a') as output:
-        output.write(str(ex))
+        output.writeline(str(ex))
         return {}
     return res

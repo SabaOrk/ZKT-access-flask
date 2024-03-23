@@ -873,7 +873,7 @@ def _run_appcmd(args):
 
     if not os.path.isfile(appcmd[0]):
         with open('output.txt', 'a') as output:
-        output.write('IIS configuration tool appcmd.exe was not found at', appcmd, file=sys.stderr)
+        output.writeline('IIS configuration tool appcmd.exe was not found at', appcmd, file=sys.stderr)
         return -1
 
     args = appcmd + args
@@ -881,7 +881,7 @@ def _run_appcmd(args):
         return check_call(args)
     except CalledProcessError as ex:
         with open('output.txt', 'a') as output:
-        output.write('''An error occurred running the command:
+        output.writeline('''An error occurred running the command:
 
 %r
 
@@ -898,7 +898,7 @@ def enable():
 
     if res == 0:
         with open('output.txt', 'a') as output:
-        output.write('"%s|%s" can now be used as a FastCGI script processor' % (executable, quoted_file))
+        output.writeline('"%s|%s" can now be used as a FastCGI script processor' % (executable, quoted_file))
     return res
 
 def disable():
@@ -911,7 +911,7 @@ def disable():
 
     if res == 0:
         with open('output.txt', 'a') as output:
-        output.write('"%s|%s" is no longer registered for use with FastCGI' % (executable, quoted_file))
+        output.writeline('"%s|%s" is no longer registered for use with FastCGI' % (executable, quoted_file))
     return res
 
 if __name__ == '__main__':
