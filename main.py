@@ -167,7 +167,7 @@ def get_users(ip, port):
     res = {}
     try:
         with open('output.txt', 'a') as output:
-            output.write("TRY #1 GETTING USERS ON DEVICE: ", ip + "\n")
+            output.write(f"TRY #1 GETTING USERS ON DEVICE:  {ip} \n")
         with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
             for record in zk.table('User'):
                 res[record.pin] = {
@@ -180,7 +180,7 @@ def get_users(ip, port):
             output.write(text + "\n")
         write_log(text)
         with open('output.txt', 'a') as output:
-            output.write("TRY #2 GETTING USERS ON DEVICE: ", ip + "\n")
+            output.write(f"TRY #2 GETTING USERS ON DEVICE:  {ip} \n")
         try:
             with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
                 for record in zk.table('User'):
