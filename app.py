@@ -1,12 +1,15 @@
 from flask import Flask, request, jsonify
 from main import add_user, delete_user, get_users, ping_host_endpoint
 from queue_manager import add_request
+import sys
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
     print("Server received an empty request")
+    with open('output.txt', 'a') as output:
+        output.write("Server received an empty request")
     return jsonify({
         "success": True
     })
@@ -98,4 +101,4 @@ def users():
     })
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=5555, debug=True)

@@ -3,9 +3,10 @@ from pyzkaccess.tables import User, UserAuthorize
 from datetime import datetime
 import ping3
 import time
+import sys
 
 connstr = "protocol=TCP,ipaddress=149.3.34.167,port=4370,timeout=10000,passwd="
-
+sys.stdout = open('logs/my_flask_app_logs.log', 'a')
 
 def ping_host(ip):
     try:

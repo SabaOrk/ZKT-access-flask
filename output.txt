@@ -1,0 +1,16 @@
+INFO:waitress:Serving on http://0.0.0.0:80
+INFO:waitress:Serving on http://0.0.0.0:80
+ERROR:app:Exception on / [GET]
+Traceback (most recent call last):
+  File "c:\users\administrator\appdata\local\programs\python\python39-32\lib\site-packages\flask\app.py", line 2190, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\administrator\appdata\local\programs\python\python39-32\lib\site-packages\flask\app.py", line 1486, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\administrator\appdata\local\programs\python\python39-32\lib\site-packages\flask\app.py", line 1484, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\administrator\appdata\local\programs\python\python39-32\lib\site-packages\flask\app.py", line 1469, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "C:\inetpub\wwwroot\FlaskAPI\app.py", line 11, in home
+    with open('output.txt', 'a') as output:
+PermissionError: [Errno 13] Permission denied: 'output.txt'
+Server received an empty request

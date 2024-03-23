@@ -1,0 +1,1 @@
+call waitress-serve --port=80 --threads=2 app:app
