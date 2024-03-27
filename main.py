@@ -98,7 +98,7 @@ def add_user(card, pin, ip, port = 470):
     except Exception as ex:
         text = f"[{get_local_time()}] Exception when adding user! Device: {ip} - {str(ex)} + '\n' + {ping_host(ip)} + '\n'"
         with open('output.txt', 'a') as output:
-            output.write(ex + "\n")
+            output.write(str(ex) + "\n")
             print(f"[{get_local_time()}] Adding user with card: {card} and pin: {pin} on device with ip: {ip} on TRY #2")
         with open('output.txt', 'a') as output:
             output.write(f"[{get_local_time()}] Adding user with card: {card} and pin: {pin} on device with ip: {ip} on TRY #2" + "\n")
@@ -160,7 +160,7 @@ def delete_user(card, pin, ip, port):
     except Exception as ex:
         text = f"[{get_local_time()}] Exception when deleting user! Device: {ip} - {str(ex)} + '\n' + {ping_host(ip)} + '\n'"
         with open('output.txt', 'a') as output:
-            output.write(ex + "\n")
+            output.write(str(ex) + "\n")
             print(f"[{get_local_time()}] Removing user with card: {card} and pin: {pin} on device with ip: {ip} on TRY #2")
         with open('output.txt', 'a') as output:
             output.write(f"[{get_local_time()}] Removing user with card: {card} and pin: {pin} on device with ip: {ip} on TRY #2" + "\n")
