@@ -40,6 +40,8 @@ def set_user():
     ip = body.get('ip')
     port = body.get('port')
     print(f"[{get_local_time()}] Recieved request to add user with card: {card} and pin: {pin}")
+    with open('output.txt', 'a') as output:
+        output.write(f"[{get_local_time()}] Recieved request to add user with card: {card} and pin: {pin}" + "\n")
     res = add_user(card=card, pin=pin, ip=ip, port=port)
     
     return jsonify({
@@ -56,6 +58,8 @@ def remove_user():
     ip = body.get('ip')
     port = body.get('port')
     print(f"[{get_local_time()}] Recieved request to remove user with card: {card} and pin: {pin}")
+    with open('output.txt', 'a') as output:
+        output.write(f"[{get_local_time()}] Recieved request to remove user with card: {card} and pin: {pin}" + "\n")
     res = delete_user(card=card, pin=pin, ip=ip, port=port)
     
     return jsonify({
