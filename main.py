@@ -70,7 +70,7 @@ def add_user(card, pin, ip, port = 470):
     connstr = f"protocol=TCP,ipaddress={ip},port={port},timeout=4000,passwd="
     try:
         autorized = False
-        with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
+        with ZKAccess(connstr=connstr, device_model=ZK400) as zk:
             user = User(card=card, pin=pin, start_time=datetime.now(), end_time=datetime(9999, 12, 31, 23, 59, 59),
                         super_authorize=False).with_zk(zk)
             user.save()
@@ -104,7 +104,7 @@ def add_user(card, pin, ip, port = 470):
             output.write(f"[{get_local_time()}] Adding user with card: {card} and pin: {pin} on device with ip: {ip} on TRY #2" + "\n")
         try:
             autorized = False
-            with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
+            with ZKAccess(connstr=connstr, device_model=ZK400) as zk:
                 user = User(card=card, pin=pin, start_time=datetime.now(), end_time=datetime(9999, 12, 31, 23, 59, 59),
                             super_authorize=False).with_zk(zk)
                 user.save()
