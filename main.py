@@ -91,16 +91,25 @@ def add_user(card, pin, ip, port=4370, doors=None):
             with open('output.txt', 'a') as output:
                 output.write(f"[{get_local_time()}] IP: {ip} CARD: {card} ADDED SUCCESS" + "\n")
 
-            if is_test_card:
-                # ახალი ლოგიკა - upsert
-                zk.table(UserAuthorize).upsert(
-                    UserAuthorize(pin=pin, timezone_id=1, doors=door_access)
-                )
+          if is_test_card:
+                print(f"[{get_local_time()}] TEST MODE: card={card}, doors={doors}, door_access={door_access}")
+                with open('output.txt', 'a') as output:
+                    output.write(f"[{get_local_time()}] TEST MODE: card={card}, doors={doors}, door_access={door_access}" + "\n")
+                
+                try:
+                    zk.table('UserAuthorize').where(pin=pin).delete_all()
+                    print(f"[{get_local_time()}] TEST MODE: Deleted old UserAuthorize for pin={pin}")
+                    with open('output.txt', 'a') as output:
+                        output.write(f"[{get_local_time()}] TEST MODE: Deleted old UserAuthorize for pin={pin}" + "\n")
+                except:
+                    pass
+                
+                userAuthorize = UserAuthorize(pin=pin, timezone_id=1, doors=door_access).with_zk(zk)
+                userAuthorize.save()
                 print(f"[{get_local_time()}] TEST MODE: Authorized To Doors: {door_access}")
                 with open('output.txt', 'a') as output:
                     output.write(f"[{get_local_time()}] TEST MODE: Authorized To Doors: {door_access}" + "\n")
-
-                # შემოწმება - რეალურად რა ჩაიწერა
+                
                 for record in zk.table('UserAuthorize'):
                     if str(record.pin) == str(pin):
                         print(f"[{get_local_time()}] TEST MODE VERIFY: pin={record.pin}, actual_doors={record.doors}")
