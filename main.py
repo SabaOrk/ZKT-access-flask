@@ -63,25 +63,27 @@ def write_log_success(text):
         logFile.write('\n')
         logFile.close()
 
-def add_user(card, pin, ip, port = 470):
+def add_user(card, pin, ip, port = 470, doors=None):
     print(f"[{get_local_time()}] Adding user with card: {card} and pin: {pin} on device with ip: {ip}")
     with open('output.txt', 'a') as output:
         output.write(f"[{get_local_time()}] Adding user with card: {card} and pin: {pin} on device with ip: {ip} on TRY #1" + "\n")
     connstr = f"protocol=TCP,ipaddress={ip},port={port},timeout=4000,passwd="
+
+    if doors:
+        door_access = (1 in doors, 2 in doors, 3 in doors, 4 in doors)
+    else:
+        door_access = (True, True, True, True)
+
     try:
         autorized = False
         with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
             user = User(card=card, pin=pin, start_time=datetime.now(), end_time=datetime(9999, 12, 31, 23, 59, 59),
                         super_authorize=False).with_zk(zk)
             user.save()
-            # zk.aux_inputs.events.refresh()
-            # zk.aux_inputs[0:3].events.poll()
             print(f"[{get_local_time()}] IP: {ip} CARD: {card} ADDED SUCCESS")
             with open('output.txt', 'a') as output:
                 output.write(f"[{get_local_time()}] IP: {ip} CARD: {card} ADDED SUCCESS" + "\n")
 
-            #write_log_success(f"IP: {ip} CARD: {card} ADDED SUCCESS ON TRY #1")
-        
             for UserAuthorizeRecord in zk.table('UserAuthorize'):
                 if UserAuthorizeRecord.pin == pin:
                     autorized = True
@@ -89,11 +91,11 @@ def add_user(card, pin, ip, port = 470):
                     with open('output.txt', 'a') as output:
                         output.write("Almost Authorized" + "\n")
             if  autorized == False:
-                userAuthorize = UserAuthorize(pin=pin,timezone_id=1,doors=(True, True, True, True)).with_zk(zk)
+                userAuthorize = UserAuthorize(pin=pin,timezone_id=1,doors=door_access).with_zk(zk)
                 userAuthorize.save()
-                print("Authorized To All Doors")
+                print(f"Authorized To Doors: {doors}")
                 with open('output.txt', 'a') as output:
-                    output.write("Authorized To All Doors" + "\n") 
+                    output.write(f"Authorized To Doors: {doors}" + "\n") 
         return True
     except Exception as ex:
         text = f"[{get_local_time()}] Exception when adding user! Device: {ip} - {str(ex)} + '\n' + {ping_host(ip)} + '\n'"
@@ -108,13 +110,10 @@ def add_user(card, pin, ip, port = 470):
                 user = User(card=card, pin=pin, start_time=datetime.now(), end_time=datetime(9999, 12, 31, 23, 59, 59),
                             super_authorize=False).with_zk(zk)
                 user.save()
-                # zk.aux_inputs.events.refresh()
-                # zk.aux_inputs[0:3].events.poll()
                 print(f"[{get_local_time()}] IP: {ip} CARD: {card} ADDED SUCCESS ON TRY #2")
                 with open('output.txt', 'a') as output:
                     output.write(f"[{get_local_time()}] IP: {ip} CARD: {card} ADDED SUCCESS" + "\n")
 
-                #write_log_success(f"IP: {ip} CARD: {card} ADDED SUCCESS ON TRY #2" + "\n")
         
                 for UserAuthorizeRecord in zk.table('UserAuthorize'):
                     if UserAuthorizeRecord.pin == pin:
@@ -123,11 +122,11 @@ def add_user(card, pin, ip, port = 470):
                         with open('output.txt', 'a') as output:
                             output.write("Almost Authorized" + "\n")
                 if  autorized == False:
-                    userAuthorize = UserAuthorize(pin=pin,timezone_id=1,doors=(True, True, True, True)).with_zk(zk)
+                    userAuthorize = UserAuthorize(pin=pin,timezone_id=1,doors=door_access).with_zk(zk)
                     userAuthorize.save()
-                    print("Authorized To All Doors")
+                    print(f"Authorized To Doors: {doors}")
                     with open('output.txt', 'a') as output:
-                        output.write("Authorized To All Doors" + "\n") 
+                        output.write(f"Authorized To Doors: {doors}" + "\n") 
             return True
         except Exception as ex:
             text = f"[{get_local_time()}] Exception when adding user! Device: {ip} - {str(ex)} + '\n' + {ping_host(ip)} + '\n'"
@@ -149,13 +148,10 @@ def delete_user(card, pin, ip, port):
             user = User(card=card, pin=pin,
                         super_authorize=True).with_zk(zk)
             user.delete()
-            # zk.aux_inputs.events.refresh()
-            # zk.aux_inputs[0:3].events.poll()
             print(f"[{get_local_time()}] IP: {ip} CARD: {card} REMOVED SUCCESS")
             with open('output.txt', 'a') as output:
                 output.write(f"[{get_local_time()}] IP: {ip} CARD: {card} REMOVED SUCCESS" + "\n")
 
-            #write_log_success(f"IP: {ip} CARD: {card} REMOVED SUCCESS ON TRY #1" + "\n")
         return True
     except Exception as ex:
         text = f"[{get_local_time()}] Exception when deleting user! Device: {ip} - {str(ex)} + '\n' + {ping_host(ip)} + '\n'"
@@ -169,20 +165,16 @@ def delete_user(card, pin, ip, port):
                 user = User(card=card, pin=pin,
                             super_authorize=True).with_zk(zk)
                 user.delete()
-                # zk.aux_inputs.events.refresh()
-                # zk.aux_inputs[0:3].events.poll()
                 print(f"[{get_local_time()}] IP: {ip} CARD: {card} REMOVED SUCCESS ON TRY #2")
                 with open('output.txt', 'a') as output:
                     output.write(f"[{get_local_time()}] IP: {ip} CARD: {card} REMOVED SUCCESS ON TRY #2" + "\n")
 
-                #write_log_success(f"IP: {ip} CARD: {card} REMOVED SUCCESS ON TRY #2" + "\n")
             return True
         except Exception as ex:
             text = f"[{get_local_time()}] Exception when deleting user! Device: {ip} - {str(ex)} + '\n' + {ping_host(ip)}"
             print(text)
             with open('output.txt', 'a') as output:
                 output.write(text + "\n")
-            #write_log(text)
             return False
     return True
 

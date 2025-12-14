@@ -39,10 +39,11 @@ def set_user():
     pin = body.get('pin')
     ip = body.get('ip')
     port = body.get('port')
+    doors = body.get('doors')
     print(f"[{get_local_time()}] Recieved request to add user with card: {card} and pin: {pin}")
     with open('output.txt', 'a') as output:
         output.write(f"[{get_local_time()}] Recieved request to add user with card: {card} and pin: {pin}" + "\n")
-    res = add_user(card=card, pin=pin, ip=ip, port=port)
+    res = add_user(card=card, pin=pin, ip=ip, port=port, doors=doors)
     
     return jsonify({
         "success": True,
