@@ -63,7 +63,7 @@ def write_log_success(text):
         logFile.write('\n')
         logFile.close()
 
-def add_user(card, pin, ip, port = 470, doors=None):
+def add_user(card, pin, ip, port=4370, doors=None):
     print(f"[{get_local_time()}] Adding user with card: {card} and pin: {pin} on device with ip: {ip}")
     with open('output.txt', 'a') as output:
         output.write(f"[{get_local_time()}] Adding user with card: {card} and pin: {pin} on device with ip: {ip} on TRY #1" + "\n")
@@ -74,8 +74,15 @@ def add_user(card, pin, ip, port = 470, doors=None):
     else:
         door_access = (True, True, True, True)
 
+    # ტესტირებისთვის
+    is_test_card = (str(card) == '3835235804')
+    
+    if is_test_card:
+        print(f"[{get_local_time()}] TEST MODE: card={card}, doors={doors}, door_access={door_access}")
+        with open('output.txt', 'a') as output:
+            output.write(f"[{get_local_time()}] TEST MODE: card={card}, doors={doors}, door_access={door_access}" + "\n")
+
     try:
-        autorized = False
         with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
             user = User(card=card, pin=pin, start_time=datetime.now(), end_time=datetime(9999, 12, 31, 23, 59, 59),
                         super_authorize=False).with_zk(zk)
@@ -84,18 +91,30 @@ def add_user(card, pin, ip, port = 470, doors=None):
             with open('output.txt', 'a') as output:
                 output.write(f"[{get_local_time()}] IP: {ip} CARD: {card} ADDED SUCCESS" + "\n")
 
-            for UserAuthorizeRecord in zk.table('UserAuthorize'):
-                if UserAuthorizeRecord.pin == pin:
-                    autorized = True
-                    print("Almost Authorized")
-                    with open('output.txt', 'a') as output:
-                        output.write("Almost Authorized" + "\n")
-            if  autorized == False:
-                userAuthorize = UserAuthorize(pin=pin,timezone_id=1,doors=door_access).with_zk(zk)
-                userAuthorize.save()
-                print(f"Authorized To Doors: {doors}")
+            if is_test_card:
+                # ახალი ლოგიკა - upsert
+                zk.table(UserAuthorize).upsert(
+                    UserAuthorize(pin=pin, timezone_id=1, doors=door_access)
+                )
+                print(f"[{get_local_time()}] TEST MODE: Authorized To Doors: {door_access}")
                 with open('output.txt', 'a') as output:
-                    output.write(f"Authorized To Doors: {doors}" + "\n") 
+                    output.write(f"[{get_local_time()}] TEST MODE: Authorized To Doors: {door_access}" + "\n")
+            else:
+                # ძველი ლოგიკა
+                autorized = False
+                for UserAuthorizeRecord in zk.table('UserAuthorize'):
+                    if UserAuthorizeRecord.pin == pin:
+                        autorized = True
+                        print("Almost Authorized")
+                        with open('output.txt', 'a') as output:
+                            output.write("Almost Authorized" + "\n")
+                if autorized == False:
+                    userAuthorize = UserAuthorize(pin=pin, timezone_id=1, doors=door_access).with_zk(zk)
+                    userAuthorize.save()
+                    print(f"Authorized To Doors: {doors}")
+                    with open('output.txt', 'a') as output:
+                        output.write(f"Authorized To Doors: {doors}" + "\n")
+                        
         return True
     except Exception as ex:
         text = f"[{get_local_time()}] Exception when adding user! Device: {ip} - {str(ex)} + '\n' + {ping_host(ip)} + '\n'"
@@ -105,28 +124,38 @@ def add_user(card, pin, ip, port = 470, doors=None):
         with open('output.txt', 'a') as output:
             output.write(f"[{get_local_time()}] Adding user with card: {card} and pin: {pin} on device with ip: {ip} on TRY #2" + "\n")
         try:
-            autorized = False
             with ZKAccess(connstr=connstr, device_model=ZK200) as zk:
                 user = User(card=card, pin=pin, start_time=datetime.now(), end_time=datetime(9999, 12, 31, 23, 59, 59),
                             super_authorize=False).with_zk(zk)
                 user.save()
                 print(f"[{get_local_time()}] IP: {ip} CARD: {card} ADDED SUCCESS ON TRY #2")
                 with open('output.txt', 'a') as output:
-                    output.write(f"[{get_local_time()}] IP: {ip} CARD: {card} ADDED SUCCESS" + "\n")
+                    output.write(f"[{get_local_time()}] IP: {ip} CARD: {card} ADDED SUCCESS ON TRY #2" + "\n")
 
-        
-                for UserAuthorizeRecord in zk.table('UserAuthorize'):
-                    if UserAuthorizeRecord.pin == pin:
-                        autorized = True
-                        print("Almost Authorized")
-                        with open('output.txt', 'a') as output:
-                            output.write("Almost Authorized" + "\n")
-                if  autorized == False:
-                    userAuthorize = UserAuthorize(pin=pin,timezone_id=1,doors=door_access).with_zk(zk)
-                    userAuthorize.save()
-                    print(f"Authorized To Doors: {doors}")
+                if is_test_card:
+                    # ახალი ლოგიკა - upsert
+                    zk.table(UserAuthorize).upsert(
+                        UserAuthorize(pin=pin, timezone_id=1, doors=door_access)
+                    )
+                    print(f"[{get_local_time()}] TEST MODE: Authorized To Doors: {door_access}")
                     with open('output.txt', 'a') as output:
-                        output.write(f"Authorized To Doors: {doors}" + "\n") 
+                        output.write(f"[{get_local_time()}] TEST MODE: Authorized To Doors: {door_access}" + "\n")
+                else:
+                    # ძველი ლოგიკა
+                    autorized = False
+                    for UserAuthorizeRecord in zk.table('UserAuthorize'):
+                        if UserAuthorizeRecord.pin == pin:
+                            autorized = True
+                            print("Almost Authorized")
+                            with open('output.txt', 'a') as output:
+                                output.write("Almost Authorized" + "\n")
+                    if autorized == False:
+                        userAuthorize = UserAuthorize(pin=pin, timezone_id=1, doors=door_access).with_zk(zk)
+                        userAuthorize.save()
+                        print(f"Authorized To Doors: {doors}")
+                        with open('output.txt', 'a') as output:
+                            output.write(f"Authorized To Doors: {doors}" + "\n")
+                            
             return True
         except Exception as ex:
             text = f"[{get_local_time()}] Exception when adding user! Device: {ip} - {str(ex)} + '\n' + {ping_host(ip)} + '\n'"
@@ -135,7 +164,6 @@ def add_user(card, pin, ip, port = 470, doors=None):
             print(text + "\n")
             return False
     return True
-
 
 
 def delete_user(card, pin, ip, port):
