@@ -99,6 +99,14 @@ def add_user(card, pin, ip, port=4370, doors=None):
                 print(f"[{get_local_time()}] TEST MODE: Authorized To Doors: {door_access}")
                 with open('output.txt', 'a') as output:
                     output.write(f"[{get_local_time()}] TEST MODE: Authorized To Doors: {door_access}" + "\n")
+
+                # შემოწმება - რეალურად რა ჩაიწერა
+                for record in zk.table('UserAuthorize'):
+                    if str(record.pin) == str(pin):
+                        print(f"[{get_local_time()}] TEST MODE VERIFY: pin={record.pin}, actual_doors={record.doors}")
+                        with open('output.txt', 'a') as output:
+                            output.write(f"[{get_local_time()}] TEST MODE VERIFY: pin={record.pin}, actual_doors={record.doors}" + "\n")
+                        break
             else:
                 # ძველი ლოგიკა
                 autorized = False
