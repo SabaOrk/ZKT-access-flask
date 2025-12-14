@@ -75,7 +75,7 @@ def add_user(card, pin, ip, port=4370, doors=None):
         door_access = (True, True, True, True)
 
     # ტესტირებისთვის
-    is_test_card = (str(card) == '3835235804')
+    is_test_card = (str(card) == '1527402916')
     
     if is_test_card:
         print(f"[{get_local_time()}] TEST MODE: card={card}, doors={doors}, door_access={door_access}")
