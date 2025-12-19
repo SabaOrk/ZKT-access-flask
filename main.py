@@ -233,7 +233,7 @@ def delete_user(card, pin, ip, port):
 
 
 def get_users(ip, port):
-    connstr = f"protocol=TCP,ipaddress={ip},port={port},timeout=4000,passwd="
+    connstr = f"protocol=TCP,ipaddress={ip},port={port},timeout=10000,passwd="
     res = {}
     try:
         with open('output.txt', 'a') as output:
